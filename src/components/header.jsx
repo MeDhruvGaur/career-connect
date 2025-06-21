@@ -7,6 +7,7 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from '@clerk/clerk-react'
 
 
@@ -15,6 +16,7 @@ const Header = () => {
   const [showSignIn, setShowSignIn] = useState(false);
 
     const [search, setSearch] = useSearchParams();
+    const { user } = useUser();
 
     useEffect(() => {
     if (search.get("sign-in")) {
@@ -43,12 +45,14 @@ const Header = () => {
             </Button>
           </SignedOut>
           <SignedIn>
+          {user?.unsafeMetadata?.role === "recruiter" && (
               <Link to="/post-job">
                 <Button variant="destructive" className="rounded-full">
                   <PenBox size={20} className="mr-2" />
                   Post a Job
                 </Button>
               </Link>
+            )}
               <UserButton appearance={{
                 elements: {
                   avatarBox: "w-10 h-10"
