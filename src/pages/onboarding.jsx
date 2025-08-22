@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { BarLoader } from "react-spinners";
-<<<<<<< HEAD
-import ProtectedRoute from "@/components/protected-route";
 
 const Onboarding = () => {
   const { user, isLoaded } = useUser();
@@ -33,44 +31,11 @@ const Onboarding = () => {
   }, [user]);
 
   if (!isLoaded) {
-=======
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-
-const Onboarding = () => {
-  const { user, isLoaded } = useUser();
-  const navigate = useNavigate()
-
-  const handleRoleSelection = async (role) => {
-    await user.update({
-      unsafeMetadata:{ role },
-    }).then(()=>{
-      navigate(role === "recruiter" ? "/post-job" : "/jobs");
-    })
-    .catch((err) => {
-      console.log("Error updating role:", err);
-    });
-  };
-
-  useEffect(() => {
-    if(user?.unsafeMetadata?.role) {
-      navigate(
-        user?.unsafeMetadata?.role === "recruiter" ? "/post-job" : "/jobs");
-    }
-  }, [user]);
-  
-  if(!isLoaded) {
->>>>>>> ab63c84bbc0d4bbe11ced3941944974dec74c6b6
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
   }
 
   return (
-<<<<<<< HEAD
     <div className="flex flex-col items-center justify-center mt-40">
-=======
-    <div className="flex flex-col items-center justify-center mt-32">
->>>>>>> ab63c84bbc0d4bbe11ced3941944974dec74c6b6
       <h2 className="gradient-title font-extrabold text-7xl sm:text-8xl tracking-tighter">
         I am a...
       </h2>
@@ -93,9 +58,5 @@ const Onboarding = () => {
     </div>
   );
 };
-<<<<<<< HEAD
-=======
- 
->>>>>>> ab63c84bbc0d4bbe11ced3941944974dec74c6b6
 
 export default Onboarding;
