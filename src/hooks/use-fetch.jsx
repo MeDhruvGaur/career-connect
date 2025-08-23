@@ -16,18 +16,17 @@ const useFetch = (cb, options = {}) => {
       const supabaseAccessToken = await session.getToken({
         template: "supabase",
       });
-
-      const result = await cb(supabaseAccessToken, options, ...args);
-
-      setData(result); // ✅ store actual data
-    } catch (err) {
-      setError(err.message || "Something went wrong");
+      const response = await cb(supabaseAccessToken, options, ...args);
+      setData(response);
+      setError(null);
+    } catch (error) {
+      setError(error);
     } finally {
       setLoading(false);
     }
   };
 
-  return { fn, data, loading, error };
+  return { data, loading, error, fn };
 };
 
 export default useFetch;

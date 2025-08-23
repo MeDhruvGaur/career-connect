@@ -1,7 +1,21 @@
-import React from "react";
+import { useUser } from "@clerk/clerk-react";
+import { Card, CardHeader, CardTitle } from "./ui/card";
 
-function JobCard() {
-  return <div>JobCard</div>;
-}
+const JobCard = ({
+  job,
+  isMyJob = false,
+  savedInit = false,
+  onJobSaved = () => {},
+}) => {
+  const { user } = useUser();
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{job.title}</CardTitle>
+      </CardHeader>
+    </Card>
+  );
+};
 
 export default JobCard;
