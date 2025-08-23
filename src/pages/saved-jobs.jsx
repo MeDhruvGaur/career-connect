@@ -1,8 +1,5 @@
+const SaveJobs = () => {
+  return <div>SaveJobs</div>;
+};
 
-const  SaveJobs = () => {
-  return (
-    <div>SaveJobs</div>
-  )
-}
-
-export default SaveJobs
+export default SaveJobs;
