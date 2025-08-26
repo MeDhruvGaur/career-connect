@@ -12,8 +12,37 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+
+const schema = z.object({
+    experience:z
+    .number().min(0, { message: "Experience must be at least 0"})
+    .int(),
+    skills: z.string().min(1, { message: "Skills are required" }),
+    education: z.enum(["Intermediate", "Graduate", "Post Graduate"], {\
+        message: "Education is required",
+    }),
+    resume:z.any().refine(
+        (file)=>file[0] && (file[0].type === "application/pdf" || 
+            file[0].type === "application/msword"
+        ),
+        { message: "Only PDF or Word documents are allowed" }
+    )
+});
 
 const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
+
+const {
+    register,
+    handleSubmit, 
+    control, 
+    formState: { errors },
+    reset,
+} = useForm({
+    resolver: zodResolver(schema),
+});
   return (
     <Drawer open={applied ? false : undefined}>
       <DrawerTrigger asChild>
@@ -38,13 +67,30 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
             type="number"
             placeholder="Years of Experience"
             className="flex-1"
+            {...register("experience", {
+                valueAsNumber: true,
+            })}
           />
+          {errors.experience && (
+            <p className="text-red-500">{errors.experience.message}</p>
+          )}
           <Input
             type="text"
             placeholder="Skills (Comma Separated)"
             className="flex-1"
+            {...register("skills")}
           />
-          <RadioGroup defaultValue="Intermediate">
+          {errors.skills && (
+            <p className="text-red-500">{errors.skills.message}</p>
+          )}
+
+          <Controller 
+          name='education'
+          control={control}
+          render={({ field }) => (
+            <RadioGroup 
+            onValueChange={field.onChange}
+            defaultValue="Intermediate">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="Intermediate" id="intermediate" />
               <Label htmlFor="intermediate">Intermediate</Label>
@@ -58,10 +104,20 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
               <Label htmlFor="post-graduate">Post Graduate</Label>
             </div>
           </RadioGroup>
+          )}
+          />
+          
+          <Input
+            type="file"
+            accept=".pdf, .doc, .docx"
+            className="flex-1 file:text-gray-500"
+          />
+          <Button type="submit" variant="blue" size="lg">
+            Apply
+          </Button>
         </form>
         <DrawerFooter>
-          <Button>Submit</Button>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
