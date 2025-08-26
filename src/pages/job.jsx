@@ -13,6 +13,7 @@ import { Briefcase, DoorClosed, DoorOpen, MapPinIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
+import ApplyJobDrawer from "@/components/apply-job";
 
 const JobPage = () => {
   const { isLoaded, user } = useUser();
@@ -110,6 +111,14 @@ const JobPage = () => {
       />
 
       {/* render application */}
+      {job?.recruiter_id !== user?.id && (
+        <ApplyJobDrawer
+          job={job}
+          user={user}
+          fetchJob={fnJob}
+          applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
+        />
+      )}
     </div>
   );
 };

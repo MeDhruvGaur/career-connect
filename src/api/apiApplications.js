@@ -15,10 +15,20 @@ export async function applyToJobs(token, _, jobData) {
     return null;
   }
 
-  const { data, error } = await supabase.from("companies").select("*");
+  const resume = `${supabaseUrl}/storage/v1/object/public/resumes/${fileName}`;
+
+  const { data, error } = await supabase
+    .from("applications")
+    .insert([
+      {
+        ...jobData,
+        resume,
+      },
+    ])
+    .select();
 
   if (error) {
-    console.error("Error Deleting Companies:", error);
+    console.error("Error Submitting Applications:", error);
     return null;
   }
   return data;
