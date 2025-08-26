@@ -78,6 +78,7 @@ const JobPage = () => {
       </div>
 
       {/* hiring Status */}
+      {loadingHiringStatus && <BarLoader width={"100"} color="#36d7b7" />}
       {job?.recruiter_id === user?.id && (
         <Select onValueChange={handleStatusChange}>
           <SelectTrigger
@@ -107,6 +108,7 @@ const JobPage = () => {
         className="sm:text-lg"
         style={{ backgroundColor: "transparent" }}
       />
+
       {/* render application */}
     </div>
   );
