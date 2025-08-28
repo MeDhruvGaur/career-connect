@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import useFetch from "@/hooks/use-fetch";
 import { applyToJob } from "../api/apiApplications";
+import { BarLoader } from "react-spinners";
 
 const schema = z.object({
   experience: z
@@ -58,6 +59,14 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
   const onSubmit = (data) => {
     fnApply({
       ...data,
+      job_id: job.id,
+      candidate_id: user.id,
+      name: user.fullName,
+      status: "applied",
+      resume: data.resume[0],
+    }).then(() => {
+      fetchJob();
+      reset();
     });
   };
 
@@ -138,6 +147,13 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
           {errors.resume && (
             <p className="text-red-500">{errors.resume.message}</p>
           )}
+
+          {errorApply?.message && (
+            <p className="text-red-500">{errorApply?.message}</p>
+          )}
+
+          {loadingApply && <BarLoader width={"100%"} color="#36d7b7" />}
+
           <Button type="submit" variant="blue" size="lg">
             Apply
           </Button>
