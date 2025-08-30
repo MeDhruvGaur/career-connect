@@ -33,10 +33,10 @@ export async function applyToJob(token, _, jobData) {
   return data;
 }
 
-//Updation
+// - Edit Application Status ( recruiter )
 export async function updateApplicationStatus(token, { job_id }, status) {
   const supabase = await supabaseClient(token);
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from("applications")
     .update({ status })
     .eq("job_id", job_id)
@@ -46,5 +46,22 @@ export async function updateApplicationStatus(token, { job_id }, status) {
     console.error("Error Updating Application Status:", error);
     return null;
   }
+
+  return data;
+}
+
+//Fetch in my jobs
+export async function getApplications(token, { user_id }) {
+  const supabase = await supabaseClient(token);
+  const { data, error } = await supabase
+    .from("applications")
+    .select("*, job:jobs(title, company:companies(name))")
+    .eq("candidate_id", user_id);
+
+  if (error) {
+    console.error("Error fetching Applications:", error);
+    return null;
+  }
+
   return data;
 }
