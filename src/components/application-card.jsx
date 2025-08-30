@@ -6,6 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import useFetch from "@/hooks/use-fetch";
+import { updateApplicationStatus } from "@/api/apiApplications";
+import { BarLoader } from "react-spinners";
 
 const ApplicationCard = ({ application, isCandidate = false }) => {
   const handleDownload = () => {
@@ -14,8 +17,17 @@ const ApplicationCard = ({ application, isCandidate = false }) => {
     link.target = "_blank";
     link.click();
   };
+
+  const { loading: loadingHiringstatus, fn: fnHiringStatus } = useFetch(
+    updateApplicationStatus,
+    {
+      job_id: application.job_id,
+    }
+  );
+
   return (
     <Card>
+      {!loadingHiringstatus && <BarLoader width={"100%"} color="#36d7b7" />}
       <CardHeader>
         <CardTitle className="flex justify-between font-bold">
           {isCandidate
